@@ -22,6 +22,7 @@ use Phact\Helpers\Text;
 use Phact\Main\Phact;
 use Phact\Orm\Fields\CharField;
 use Phact\Orm\Fields\DateField;
+use Phact\Orm\Fields\FileField;
 use Phact\Orm\Fields\ForeignField;
 use Phact\Orm\Fields\NumericField;
 use Phact\Orm\Model;
@@ -59,7 +60,10 @@ class MetaComponent extends Meta
                 $field instanceof CharField ||
                 $field instanceof NumericField ||
                 $field instanceof DateField ||
-                $field instanceof ForeignField
+                $field instanceof ForeignField &&
+                !(
+                    $field instanceof FileField
+                )
             ) {
                 $label = $field->label;
                 if ($label) {
