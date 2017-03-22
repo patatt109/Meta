@@ -57,11 +57,12 @@ class MetaComponent extends Meta
         $params = [];
         foreach ($fields as $field) {
             if (
-                $field instanceof CharField ||
-                $field instanceof NumericField ||
-                $field instanceof DateField ||
-                $field instanceof ForeignField &&
-                !(
+                (
+                    $field instanceof CharField ||
+                    $field instanceof NumericField ||
+                    $field instanceof DateField ||
+                    $field instanceof ForeignField
+                ) && !(
                     $field instanceof FileField
                 )
             ) {
