@@ -109,7 +109,7 @@ class MetaComponent extends Meta
                 foreach ($list as $item) {
                     $items[] = $item['name'];
                 }
-                array_reverse($items);
+                $items = array_reverse($items);
                 $delimiter = Phact::app()->settings->get('Meta.delimiter');
                 $this->setTitle(implode($delimiter, $items));
             }
