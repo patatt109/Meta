@@ -22,6 +22,7 @@ use Phact\Helpers\Text;
 use Phact\Main\Phact;
 use Phact\Orm\Fields\CharField;
 use Phact\Orm\Fields\DateField;
+use Phact\Orm\Fields\FileField;
 use Phact\Orm\Fields\ForeignField;
 use Phact\Orm\Fields\NumericField;
 use Phact\Orm\Model;
@@ -29,6 +30,8 @@ use Phact\Orm\Model;
 class MetaComponent extends Meta
 {
     public $templateUsed = false;
+
+    public $breadcrumbsFallback = true;
 
     public function useTemplate($key, $params = [])
     {
@@ -56,10 +59,11 @@ class MetaComponent extends Meta
         $params = [];
         foreach ($fields as $field) {
             if (
-                $field instanceof CharField ||
+                ($field instanceof CharField ||
                 $field instanceof NumericField ||
                 $field instanceof DateField ||
-                $field instanceof ForeignField
+                $field instanceof ForeignField)
+                && !($field instanceof FileField)
             ) {
                 $label = $field->label;
                 if ($label) {
@@ -81,15 +85,30 @@ class MetaComponent extends Meta
 
     public function getData()
     {
+        $fallback = true;
         if (!$this->templateUsed) {
             $url = Phact::app()->request->getPath();
             $meta = MetaUrl::objects()->filter([
                 'url' => $url
             ])->get();
             if ($meta) {
+                $fallback = false;
                 foreach (['title', 'description'] as $name) {
                     $this->{$name} = $meta->{$name};
                 }
+            }
+        }
+        if ($fallback && $this->breadcrumbsFallback && !$this->getTitle()) {
+            $breadcrumbs = Phact::app()->hasComponent('breadcrumbs') ? Phact::app()->breadcrumbs : null;
+            if ($breadcrumbs) {
+                $list = $breadcrumbs->get();
+                $items = [];
+                foreach ($list as $item) {
+                    $items[] = $item['name'];
+                }
+                array_reverse($items);
+                $delimiter = Phact::app()->settings->get('Meta.delimiter');
+                $this->setTitle(implode($delimiter, $items));
             }
         }
         return parent::getData();
