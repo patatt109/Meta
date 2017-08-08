@@ -1,5 +1,16 @@
 # Мета (SEO) модуль для Phact
 
+## Роуты (для robots.txt)
+
+```php
+[
+    'route' => '',
+    'path' => 'Modules.Meta.routes',
+    'namespace' => 'meta'
+],
+```
+
+
 ## Компонент
 
 ```php
