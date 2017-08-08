@@ -14,6 +14,7 @@
 namespace Modules\Meta\Models;
 
 use Phact\Orm\Fields\CharField;
+use Phact\Orm\Fields\TextField;
 use Phact\Orm\Model;
 
 class MetaSettings extends Model
@@ -31,6 +32,11 @@ class MetaSettings extends Model
                 'label' => 'Разделитель сегментов заголовка',
                 'null' => true
             ],
+            'robots' => [
+                'class' => TextField::class,
+                'label' => 'robots.txt',
+                'null' => true
+            ]
         ];
     }
 } 
