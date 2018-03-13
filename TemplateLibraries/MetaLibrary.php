@@ -26,12 +26,9 @@ class MetaLibrary extends TemplateLibrary
      * @kind function
      * @return string
      */
-    public static function renderMeta()
+    public static function renderMeta($params)
     {
         $template = isset($params['template']) ? $params['template'] : 'meta/default.tpl';
-        return self::renderTemplate($template, array_merge(Phact::app()->meta->getData(), [
-            'postfix' => Phact::app()->settings->get('Meta.postfix'),
-            'delimiter' => Phact::app()->settings->get('Meta.delimiter'),
-        ]));
+        return self::renderTemplate($template, Phact::app()->meta->getData());
     }
 }

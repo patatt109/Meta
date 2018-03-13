@@ -14,11 +14,10 @@
 
 namespace Modules\Meta\Components;
 
-
+use Modules\Meta\Models\MetaBound;
 use Modules\Meta\Models\MetaTemplate;
 use Modules\Meta\Models\MetaUrl;
 use Phact\Components\Meta;
-use Phact\Helpers\Text;
 use Phact\Main\Phact;
 use Phact\Orm\Fields\CharField;
 use Phact\Orm\Fields\DateField;
@@ -43,9 +42,22 @@ class MetaComponent extends Meta
         }
         if ($template) {
             $this->templateUsed = true;
-            foreach (['title', 'description'] as $name) {
+            foreach (['title', 'description', 'keywords'] as $name) {
                 $this->{$name} = strtr($template->{$name}, $params);
             }
+        }
+    }
+
+    public function useModel(Model $model)
+    {
+        $bound = MetaBound::fetch($model);
+        if ($bound) {
+            foreach (['title', 'description', 'keywords'] as $name) {
+                $this->{$name} = $bound->{$name};
+            }
+        }
+        if (method_exists($model, 'getAbsoluteUrl')) {
+            $this->setCanonical($model->getAbsoluteUrl());
         }
     }
 
@@ -86,6 +98,32 @@ class MetaComponent extends Meta
         return $params;
     }
 
+    public function getTitle()
+    {
+        $postfix = Phact::app()->settings->get('Meta.postfix') ?: '';
+        $delimiter = Phact::app()->settings->get('Meta.delimiter')?: '';
+        $title = $this->_title;
+        if ($postfix) {
+            $title .= $delimiter . $postfix;
+        }
+        return $title;
+    }
+
+    public function getDescription()
+    {
+        return $this->_description;
+    }
+
+    public function getKeywords()
+    {
+        return $this->_keywords;
+    }
+
+    public function getCanonical()
+    {
+        return $this->_canonical;
+    }
+
     public function getData()
     {
         $fallback = true;
@@ -96,7 +134,7 @@ class MetaComponent extends Meta
             ])->get();
             if ($meta) {
                 $fallback = false;
-                foreach (['title', 'description'] as $name) {
+                foreach (['title', 'description', 'keywords'] as $name) {
                     $this->{$name} = $meta->{$name};
                 }
             }

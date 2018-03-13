@@ -70,7 +70,7 @@ Phact::app()->meta->useTemplate("TEMPLATE_KEY", [
 
 Имеет наивысший приоритет, задается интуитивно-понятно через модель MetaUrl
 
-## Вывод в Мета шаблоне
+## Вывод Мета в шаблоне
 
 ```smarty
 {render_meta:raw}

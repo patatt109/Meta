@@ -29,6 +29,11 @@ abstract class MetaModel extends Model
                 'class' => CharField::class,
                 'label' => 'Описание',
                 'null' => true
+            ],
+            'keywords' => [
+                'class' => CharField::class,
+                'label' => 'Ключевые слова',
+                'null' => true
             ]
         ];
     }
