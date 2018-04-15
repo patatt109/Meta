@@ -14,6 +14,7 @@
 namespace Modules\Meta\Admin;
 
 use Modules\Admin\Contrib\BoundAdmin;
+use Modules\Meta\Forms\MetaBoundForm;
 use Modules\Meta\Interfaces\DefaultMetaInterface;
 use Modules\Meta\Models\MetaBound;
 use Phact\Form\ModelForm;
@@ -45,6 +46,11 @@ class MetaBoundAdmin extends BoundAdmin
     public function fetchModel($ownerInstance)
     {
         return MetaBound::getOrCreate($ownerInstance);
+    }
+
+    public function getForm()
+    {
+        return new MetaBoundForm();
     }
 
     /**
