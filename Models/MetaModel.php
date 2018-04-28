@@ -13,6 +13,7 @@
  */
 namespace Modules\Meta\Models;
 
+use Modules\Meta\Fields\Orm\LetterCountField;
 use Phact\Orm\Fields\CharField;
 use Phact\Orm\Model;
 
@@ -22,16 +23,16 @@ abstract class MetaModel extends Model
     {
         return [
             'title' => [
-                'class' => CharField::class,
+                'class' => LetterCountField::class,
                 'label' => 'Заголовок'
             ],
             'description' => [
-                'class' => CharField::class,
+                'class' => LetterCountField::class,
                 'label' => 'Описание',
                 'null' => true
             ],
             'keywords' => [
-                'class' => CharField::class,
+                'class' => LetterCountField::class,
                 'label' => 'Ключевые слова',
                 'null' => true
             ]
