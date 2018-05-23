@@ -30,6 +30,8 @@ class MetaComponent extends Meta
 {
     public $templateUsed = false;
 
+    public $modelUsed = false;
+
     public $breadcrumbsFallback = true;
 
     public function useTemplate($key, $params = [])
@@ -52,6 +54,7 @@ class MetaComponent extends Meta
     {
         $bound = MetaBound::fetch($model);
         if ($bound) {
+            $this->modelUsed = true;
             foreach (['title', 'description', 'keywords'] as $name) {
                 $this->{$name} = $bound->{$name};
             }
@@ -128,7 +131,7 @@ class MetaComponent extends Meta
 
     public function getData()
     {
-        $fallback = !$this->templateUsed;
+        $fallback = !$this->templateUsed && !$this->modelUsed;
         $url = Phact::app()->request->getPath();
         $meta = MetaUrl::objects()->filter([
             'url' => $url
