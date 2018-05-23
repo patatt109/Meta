@@ -128,17 +128,15 @@ class MetaComponent extends Meta
 
     public function getData()
     {
-        $fallback = true;
-        if (!$this->templateUsed) {
-            $url = Phact::app()->request->getPath();
-            $meta = MetaUrl::objects()->filter([
-                'url' => $url
-            ])->get();
-            if ($meta) {
-                $fallback = false;
-                foreach (['title', 'description', 'keywords'] as $name) {
-                    $this->{$name} = $meta->{$name};
-                }
+        $fallback = !$this->templateUsed;
+        $url = Phact::app()->request->getPath();
+        $meta = MetaUrl::objects()->filter([
+            'url' => $url
+        ])->get();
+        if ($meta) {
+            $fallback = false;
+            foreach (['title', 'description', 'keywords'] as $name) {
+                $this->{$name} = $meta->{$name};
             }
         }
         if ($fallback && $this->breadcrumbsFallback && !$this->getTitle()) {
