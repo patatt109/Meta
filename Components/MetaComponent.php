@@ -92,6 +92,7 @@ class MetaComponent extends Meta
                         }
                     }
                     $params[$label] = $value;
+                    $params[mb_strtoupper($field->name, 'UTF-8')] = $value;
                 }
             }
         }
