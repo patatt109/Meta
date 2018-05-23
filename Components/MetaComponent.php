@@ -83,6 +83,7 @@ class MetaComponent extends Meta
                 $label = $field->label;
                 if ($label) {
                     $label = '{' . mb_strtoupper($label, 'UTF-8') . '}';
+                    $name = '{' . mb_strtoupper($field->name, 'UTF-8') . '}';
                     $value = $field->getValue();
                     if (is_object($value)) {
                         try {
@@ -92,7 +93,7 @@ class MetaComponent extends Meta
                         }
                     }
                     $params[$label] = $value;
-                    $params[mb_strtoupper($field->name, 'UTF-8')] = $value;
+                    $params[$name] = $value;
                 }
             }
         }
