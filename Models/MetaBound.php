@@ -66,9 +66,9 @@ class MetaBound extends MetaModel
 
     public static function getOrCreate($object)
     {
-        $model = self::fetch($object);
+        $model = static::fetch($object);
         if (!$model) {
-            $model = new self();
+            $model = new static();
             $model->object_pk = $object->id;
             $model->object_class = $object->className();
         }
