@@ -58,7 +58,7 @@ class MetaBound extends MetaModel
 
     public static function fetch($object)
     {
-        return self::objects()->filter([
+        return static::objects()->filter([
             'object_pk' => $object->id,
             'object_class' => $object->className()
         ])->get();
