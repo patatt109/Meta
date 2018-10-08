@@ -7,8 +7,6 @@
  * @author Okulov Anton
  * @email qantus@mail.ru
  * @version 1.0
- * @company HashStudio
- * @site http://hashstudio.ru
  * @date 16/02/17 13:37
  */
 namespace Modules\Meta\Admin;
@@ -29,13 +27,13 @@ class MetaTemplateAdmin extends Admin
         return new MetaTemplate;
     }
     
-    public static function getName()
+    public function getName()
     {
-        return 'Шаблоны мета';
+        return $this->t('Meta.main', 'Meta templates');
     }
 
-    public static function getItemName()
+    public function getItemName()
     {
-        return 'Шаблон мета';
+        return $this->t('Meta.main', 'Meta template');
     }
 }

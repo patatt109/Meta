@@ -7,8 +7,6 @@
  * @author Okulov Anton
  * @email qantus@mail.ru
  * @version 1.0
- * @company HashStudio
- * @site http://hashstudio.ru
  * @date 16/02/17 13:37
  */
 namespace Modules\Meta\Admin;
@@ -33,14 +31,14 @@ class MetaBoundAdmin extends BoundAdmin
         return new MetaBound;
     }
     
-    public static function getName()
+    public function getName()
     {
-        return 'Метаданные';
+        return $this->t('Meta.main', 'Metadata');
     }
 
-    public static function getItemName()
+    public function getItemName()
     {
-        return 'Метаданные';
+        return $this->t('Meta.main', 'Metadata');
     }
 
     public function fetchModel($ownerInstance)

@@ -7,8 +7,6 @@
  * @author Okulov Anton
  * @email qantus@mail.ru
  * @version 1.0
- * @company HashStudio
- * @site http://hashstudio.ru
  * @date 16/02/17 13:34
  */
 namespace Modules\Meta\Models;
@@ -22,25 +20,11 @@ class MetaBound extends MetaModel
 {
     public static function getFields() 
     {
-        return [
-            'title' => [
-                'class' => CharField::class,
-                'label' => 'Заголовок',
-                'hint' => 'Тег title',
-                'null' => true
-            ],
-            'description' => [
-                'class' => CharField::class,
-                'label' => 'Описание',
-                'hint' => 'Тег meta description',
-                'null' => true
-            ],
-            'keywords' => [
-                'class' => CharField::class,
-                'label' => 'Ключевые слова',
-                'hint' => 'Тег meta keywords',
-                'null' => true
-            ],
+        $parentFields = parent::getFields();
+
+        $parentFields['title']['null'] = true;
+
+        return array_merge($parentFields, [
             'object_class' => [
                 'class' => CharField::class,
                 'label' => 'Model class',
@@ -53,7 +37,7 @@ class MetaBound extends MetaModel
                 'null' => true,
                 'editable' => false
             ],
-        ];
+        ]);
     }
 
     public static function fetch($object)
@@ -73,18 +57,5 @@ class MetaBound extends MetaModel
             $model->object_class = $object->className();
         }
         return $model;
-    }
-
-    public function beforeSave()
-    {
-        parent::beforeSave();
-        $this->title = $this->cut($this->title);
-        $this->description = $this->cut($this->description);
-        $this->keywords = $this->cut($this->keywords);
-    }
-
-    public function cut($text)
-    {
-        return mb_substr($text, 0, 250, 'UTF-8') . (mb_strlen($text, 'UTF-8') > 250 ? '...' : '');
     }
 } 

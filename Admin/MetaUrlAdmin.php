@@ -7,8 +7,6 @@
  * @author Okulov Anton
  * @email qantus@mail.ru
  * @version 1.0
- * @company HashStudio
- * @site http://hashstudio.ru
  * @date 16/02/17 13:37
  */
 namespace Modules\Meta\Admin;
@@ -28,13 +26,13 @@ class MetaUrlAdmin extends Admin
         return new MetaUrl;
     }
     
-    public static function getName()
+    public function getName()
     {
-        return 'Мета по Url';
+        return $this->t('Meta.main', 'Meta by URL');
     }
 
-    public static function getItemName()
+    public function getItemName()
     {
-        return 'Мета по Url';
+        return $this->t('Meta.main', 'Meta by URL');
     }
 }

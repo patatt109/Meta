@@ -7,32 +7,64 @@
  * @author Okulov Anton
  * @email qantus@mail.ru
  * @version 1.0
- * @company HashStudio
- * @site http://hashstudio.ru
  * @date 16/02/17 08:45
  */
 
 namespace Modules\Meta\Components;
 
+use Modules\Meta\Interfaces\ModelMetaInterface;
 use Modules\Meta\Models\MetaBound;
 use Modules\Meta\Models\MetaTemplate;
 use Modules\Meta\Models\MetaUrl;
+use Phact\Components\BreadcrumbsInterface;
 use Phact\Components\Meta;
-use Phact\Main\Phact;
+use Phact\Components\Settings;
 use Phact\Orm\Fields\CharField;
 use Phact\Orm\Fields\DateField;
 use Phact\Orm\Fields\FileField;
 use Phact\Orm\Fields\ForeignField;
 use Phact\Orm\Fields\NumericField;
 use Phact\Orm\Model;
+use Phact\Request\HttpRequestInterface;
 
-class MetaComponent extends Meta
+class MetaComponent extends Meta implements ModelMetaInterface
 {
     public $templateUsed = false;
 
     public $modelUsed = false;
 
     public $breadcrumbsFallback = true;
+
+    /**
+     * @var HttpRequestInterface
+     */
+    protected $_request;
+
+    /**
+     * @var Settings
+     */
+    protected $_settings;
+
+    /**
+     * @var BreadcrumbsInterface
+     */
+    protected $_breadcrumbs;
+
+    /**
+     * @var string
+     */
+    protected $_url;
+
+    public function __construct(
+        HttpRequestInterface $request = null,
+        Settings $settings = null,
+        BreadcrumbsInterface $breadcrumbs = null
+    )
+    {
+        $this->_request = $request;
+        $this->_settings = $settings;
+        $this->_breadcrumbs = $breadcrumbs;
+    }
 
     public function useTemplate($key, $params = [])
     {
@@ -50,6 +82,11 @@ class MetaComponent extends Meta
         }
     }
 
+    /**
+     * Fetch model-based metadata
+     * @param Model $model
+     * @return mixed
+     */
     public function useModel(Model $model)
     {
         $bound = MetaBound::fetch($model);
@@ -105,8 +142,12 @@ class MetaComponent extends Meta
 
     public function getTitle()
     {
-        $postfix = Phact::app()->settings->get('Meta.postfix') ?: '';
-        $delimiter = Phact::app()->settings->get('Meta.delimiter')?: '';
+        $postfix = '';
+        $delimiter = ' - ';
+        if ($this->_settings) {
+            $postfix = $this->_settings->get('Meta.postfix') ?: '';
+            $delimiter = $this->_settings->get('Meta.delimiter') ?: '';
+        }
         $title = $this->_title;
         if ($postfix) {
             $title .= $delimiter . $postfix;
@@ -129,10 +170,18 @@ class MetaComponent extends Meta
         return $this->_canonical;
     }
 
+    public function setUrl()
+    {
+
+    }
+
     public function getData()
     {
         $fallback = !$this->templateUsed && !$this->modelUsed;
-        $url = Phact::app()->request->getPath();
+        $url = $this->_url;
+        if (!$url && $this->_request) {
+            $url = $this->_request->getPath();
+        }
         $meta = MetaUrl::objects()->filter([
             'url' => $url
         ])->get();
@@ -143,15 +192,14 @@ class MetaComponent extends Meta
             }
         }
         if ($fallback && $this->breadcrumbsFallback && !$this->getTitle()) {
-            $breadcrumbs = Phact::app()->hasComponent('breadcrumbs') ? Phact::app()->breadcrumbs : null;
-            if ($breadcrumbs) {
-                $list = $breadcrumbs->get();
+            if ($this->_breadcrumbs) {
+                $list = $this->_breadcrumbs->get();
                 $items = [];
                 foreach ($list as $item) {
                     $items[] = $item['name'];
                 }
                 $items = array_reverse($items);
-                $delimiter = Phact::app()->settings->get('Meta.delimiter');
+                $delimiter = $this->_settings ? $this->_settings->get('Meta.delimiter') : ' - ';
                 $this->setTitle(implode($delimiter, $items));
             }
         }

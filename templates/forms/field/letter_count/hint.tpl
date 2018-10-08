@@ -1,6 +1,6 @@
 <div class="field-letter-count__value hint">
     <span class="field-letter-count__text">
-        Кол-во символов:
+        {t "Meta.main" "Symbols count"}:
     </span>
     <span class="field-letter-count__value" id="{$id}-value">
         {$field->getRenderValue()|length}

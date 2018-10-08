@@ -7,8 +7,6 @@
  * @author Okulov Anton
  * @email qantus@mail.ru
  * @version 1.0
- * @company HashStudio
- * @site http://hashstudio.ru
  * @date 16/02/17 13:34
  */
 namespace Modules\Meta\Models;
@@ -16,20 +14,23 @@ namespace Modules\Meta\Models;
 use Phact\Orm\Fields\CharField;
 use Phact\Orm\Fields\TextField;
 use Phact\Orm\Model;
+use Phact\Translate\Translator;
 
 class MetaSettings extends Model
 {
+    use Translator;
+
     public static function getFields() 
     {
         return [
             'postfix' => [
                 'class' => CharField::class,
-                'label' => 'Последний сегмент заголовка',
+                'label' => self::t('Meta.main', 'Last segment of title'),
                 'null' => true
             ],
             'delimiter' => [
                 'class' => CharField::class,
-                'label' => 'Разделитель сегментов заголовка',
+                'label' => self::t('Meta.main', 'Title segments delimiter'),
                 'null' => true
             ],
             'robots' => [

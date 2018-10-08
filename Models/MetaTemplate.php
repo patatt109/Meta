@@ -7,8 +7,6 @@
  * @author Okulov Anton
  * @email qantus@mail.ru
  * @version 1.0
- * @company HashStudio
- * @site http://hashstudio.ru
  * @date 16/02/17 12:11
  */
 namespace Modules\Meta\Models;
@@ -22,7 +20,7 @@ class MetaTemplate extends MetaModel
         return array_merge(parent::getFields(), [
             'key' => [
                 'class' => CharField::class,
-                'label' => 'Ключ'
+                'label' => self::t('Meta.main', 'Key')
             ]
         ]);
     }
