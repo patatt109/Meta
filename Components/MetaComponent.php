@@ -142,13 +142,20 @@ class MetaComponent extends Meta implements ModelMetaInterface
 
     public function getTitle()
     {
+        if ($this->_title) {
+            return $this->decorateTitle($this->_title);
+        }
+        return null;
+    }
+
+    protected function decorateTitle($title)
+    {
         $postfix = '';
         $delimiter = ' - ';
         if ($this->_settings) {
             $postfix = $this->_settings->get('Meta.postfix') ?: '';
             $delimiter = $this->_settings->get('Meta.delimiter') ?: '';
         }
-        $title = $this->_title;
         if ($postfix) {
             $title .= $delimiter . $postfix;
         }
@@ -170,9 +177,9 @@ class MetaComponent extends Meta implements ModelMetaInterface
         return $this->_canonical;
     }
 
-    public function setUrl()
+    public function setUrl($url)
     {
-
+        $this->_url = $url;
     }
 
     public function getData()
