@@ -207,7 +207,7 @@ class MetaComponent extends Meta implements ModelMetaInterface
                 }
                 $items = array_reverse($items);
                 $delimiter = $this->_settings ? $this->_settings->get('Meta.delimiter') : ' - ';
-                $this->setTitle(implode($delimiter, $items));
+                $this->setTitle(implode($delimiter ?? ' - ', $items));
             }
         }
         return parent::getData();
